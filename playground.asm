@@ -4,7 +4,7 @@ SECTION .data
     LEN_TXT DB LEN_TXT - TXT                ; Data panjang text
 
     ; [ Kelompok data print 10 bintang ]
-    STARS TIMES 10 DB "*"                   ; 10 Bintang
+    STARS TIMES 10 DB "*", 10               ; 10 Bintang
     LEN_STARS DB LEN_STARS - STARS          ; Data panjang 10 bintang
 
 SECTION .text
@@ -17,13 +17,6 @@ SECTION .text
         MOV AX, 1                           ; Simpan perintah menulis ke mangkok AL (Accumulator)
         MOV DI, 1                           ; Simpan target output ke mangkok DI (Destination Index) (Target output ke layar)
         SYSCALL                             ; Panggil OS untuk kerja
-
-        ;                                   [ PRINT NEWLINE DAN BARIS KOSONG ]
-        MOV ESI, 0Ah                        ; 0Ah = Newline
-        MOV DX, 1                           ; Panjang newline 1 byte
-        MOV AX, 1                           ; Perintah tulis
-        MOV DI, 1                           ; Target tulis ke layar
-        SYSCALL                             ; Panggil kernel/OS
 
         ;                                   [ PRINT 10 BINTANG ]
         MOV RSI, STARS                      ; Simpan alamat 10 bintang ke mangkok RSI
