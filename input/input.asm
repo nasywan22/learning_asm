@@ -24,7 +24,8 @@ SECTION .text
         ; [ PRINT PROMPT ]
         MOV ESI , PROMPT                ; Simpan source alamat target ke wadah source
         MOV AX  , SYS_WRITE             ; Simpan perintah   write  ke wadah accumulator
-        MOV DI  , STDOUT                ; Simpan target     output ke wadah destination
+        XOR RDI  , RDI                  ; Kosongkan wadah DI bekas tadi dipakai perhitungan
+        MOV DI  , STDOUT                ; Simpan target stdout ke awdah DI
         SYSCALL                         ; Panggil OS/Kernel
 
         ; [ STOP PROGRAM ]
