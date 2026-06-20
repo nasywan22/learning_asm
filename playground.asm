@@ -1,11 +1,11 @@
 SECTION .data
     ; [ Kelompok data print "Hello World" ]
     TXT DB "HELLO, WORLD!", 10              ; Data text
-    LEN_TXT DB LEN_TXT - TXT                ; Data panjang text
+    LEN_TXT EQU $ - TXT                     ; Data panjang text
 
     ; [ Kelompok data print 10 bintang ]
-    STARS TIMES 10 DB "*", 10               ; 10 Bintang
-    LEN_STARS DB LEN_STARS - STARS          ; Data panjang 10 bintang
+    STARS TIMES 10 DB "*"                   ; 10 Bintang
+    LEN_STARS EQU $ - STARS                 ; Data panjang 10 bintang
 
 SECTION .text
     GLOBAL _start                           ; Definisikan nama titik mulai nya
