@@ -5,13 +5,10 @@ STDOUT      EQU     1
 STDIN       EQU     0
 
 SECTION .data
-    data_start:                                                 ; !!! DATA DIMULAI DISINI !!!
-        PROMPT          DB      "Enter your name: ",    0       ; Prompt  Text
-        DISPLAY_NAME    DB      "Your name is: ",       0       ; Display Text
+    PROMPT              DB      "Enter your name: ",0       ; Prompt  Text
+    DISPLAY_NAME        DB      "Your name is: ",0          ; Display Text
 
-    data_end:
-
-    TOTAL_DATA_BYTE     EQU     data_start - data_end           ; Menghitung total seluruh byte dalam section data
+    DATA_END_TAG        EQU             $                   ; Penanda posisi alamat terakhir data
 
 SECTION .bss
     FIRST_NAME      RESB        50          ; Sedia wadah nama depan    sepanjang 50 byte
@@ -23,15 +20,13 @@ SECTION .text
 
     _start:                             ; !!! INSTRUKSI DIMULAI DISINI !!!
         ; [ HITUNG PANJANG PROMPT ]
-        MOV ESI, DISPLAY_NAME           ; Pindahkan alamat DN     ke wadah ESI (Source/sumber)
-        MOV EDI, PROMPT                 ; Pindahkan alamat PROMPT ke wadah EDI (Destination/destinasi)
-        SUB ESI, EDI                    ; Perhitungan alamat DN dikurangi PROMPT hasilnya masuk ke mangkok ESI
-        MOV EDX, ESI                    ; Memindahkan nilai dari mangkok ESI ke EDX (merubah hasil perhitungan menjadi data)
+        MOV ESI, PROMPT                 ; Simpan alamat PROMPT       ke wadah source
+        MOV EDI, DISPLAY_NAME           ; Simpan alamat DISPLAY_NAME ke wadah destination                
+        SUB EDI, ESI                    ; Masukkan alamat prompt ke wadah DISPLAY_NAME untuk mengurangi nilai alamat DISPLAY_NAME     
+        MOV EDX, EDI                    ; Pindahkan hasil perhitungan ke wadah data     
 
         ; [ PRINT PROMPT ]
-        MOV ESI , PROMPT                ; Simpan source alamat target ke wadah source
         MOV AX  , SYS_WRITE             ; Simpan perintah   write  ke wadah accumulator
-        XOR RDI , RDI                   ; Kosongkan wadah DI bekas tadi dipakai perhitungan
         MOV DI  , STDOUT                ; Simpan target stdout ke awdah DI
         SYSCALL                         ; Panggil OS/Kernel
 
@@ -44,19 +39,21 @@ SECTION .text
 
         ; [ HITUNG PANJANG TEXT DISPLAY_NAME ]
         MOV ESI, DISPLAY_NAME
-        MOV EDI, TOTAL_DATA_BYTE
+        MOV EDI, DATA_END_TAG
         SUB EDI, ESI
         MOV EDX, EDI
 
         ; [ PRINT DISPLAY_NAME ]
-        MOV ESI , DISPLAY_NAME
         MOV AX  , SYS_WRITE
-        XOR RDI , RDI
         MOV DI  , STDOUT
         SYSCALL
 
         ; [ PRINT NAMA ]
-        
+        MOV ESI , NAME
+        MOV EDX , 100
+        MOV AX  , SYS_WRITE
+        MOV DI  , STDOUT
+        SYSCALL
 
         ; [ STOP PROGRAM ]
         MOV RAX, 60                     ; Syscall number untuk sys_exit (64-bit)
